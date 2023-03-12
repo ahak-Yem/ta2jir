@@ -1,0 +1,73 @@
+﻿@{
+  Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+@{
+    ViewData["Title"] = "Register";
+}
+@model ta2jir.Models.User
+<html>
+    <body>
+        <center>
+        <form method="post" asp-action="Register" asp-controller="Login" enctype="multipart/form-data">
+            <div class="border p-3 mt-4" style="max-width:600px;color:black; background:linear-gradient(to bottom, #00ff99 -3%, #ffffff 74%);border-radius:25px;">
+                <legend style="color:white;font-weight: 900;">Create new account</legend>
+                <hr />
+                <P align="left" style="margin-top:0px;margin-bottom:20px;color:black;font-weight:500">Please fill in this form to create a new free account</P>
+                <div class="form-group">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" type="email" class="form-control" name="Email" placeholder="Email" id="floatingInput" required="" autofocus="" />
+                        <label for="floatingInput">Email address</label>
+                        <span asp-validation-for="Email" class="text-danger" style=" text-align: left;"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Password" type="password" class="form-control" id="floatingPassword" name="Password" placeholder="Password" required="" />
+                        <label for="floatingPassword">Password</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="floatingRePassword" name="RePassword" placeholder="Repeat Password" required="" />
+                        <label for="floatingRePassword">Repeat Password</label>
+                        <span asp-validation-for="Password" class="text-danger" style=" text-align: left;"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Name" type="text" class="form-control" id="floatingName" name="Name" placeholder="Name" required="" />
+                        <label for="floatingName">Name</label>
+                        <span asp-validation-for="Name" style=" text-align: left;" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-floating mb-3">
+                        <input asp-for="Birthdate" type="date" class="form-control" id="floatingDate" name="Birthdate" />
+                        <label for="floatingDate">Birthdate (optional)</label>
+                        <span asp-validation-for="Birthdate" class="text-danger" style=" text-align: left;"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form mb-3">
+                        <p align="left" style="margin-bottom:3px;font-size:14px;color:silver">Please choose your profile picture (optional)</p>
+                        <input asp-for="ProfilePicFile" type="file" class="form-control" id="ProfilePicFile" name="ProfilePicFile"
+                        accept="image/png, image/jpeg, image/gif, image/jpg, image/tiff, image/ai, image/psd, image/raw"/>
+                    </div>
+                </div>
+                <div style="text-align: center">
+                    <div class="mb-2">
+                        <input type="submit" value="Register" class="btn btn-lg" style="width:230px;background-color:#00ff99;color:white;font-weight:800" />
+                    </div> 
+                    <a asp-controller="Login" asp-action="Index" class="btn btn-lg btn-outline-dark" style="width:230px;font-weight:800;">Back to login</a>
+                </div>
+            </div>
+        </form>
+        </center>
+    </body>
+</html>
+@section Scripts
+{
+    @{
+    <partial name="_ValidationScriptsPartial" />
+    }
+}

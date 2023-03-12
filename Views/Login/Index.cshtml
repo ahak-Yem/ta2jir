@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+@{
+    ViewData["Title"] = "Login";
+}
+
+<link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+<div class="wrapper">
+    <form class="form-signin" style="background-color: #ffffff;background-image: linear-gradient(135deg, #ffffff 0%, #fefaef 43%, #ebebeb 67%); border-radius: 25px; box-shadow: 0px 2px 6px rgb(100, 100, 100);">
+        <div class="p-2">
+            <a class="navbar-brand center"><center><img src="~/lib/login/loginWithKey.png" asp-append-version="true" width="150px" Height="150px" /></center></a>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" name="Email" placeholder="Email" id="floatingInput" required="" autofocus="" />
+            <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" id="floatingPassword" name="Password" placeholder="Password" required="" />
+            <label for="floatingPassword">Password</label>
+        </div>
+        @if (LoginController.notAuthorized == true)
+        {
+            <p style="text-align:center">
+                &nbsp  <span class="text-danger">Please reenter your login data or create a new account</span>
+            </p>
+        }
+        else
+        {
+            <br />
+        }
+        <button class="btn btn-lg btn-block form-control btn-primary" style="color:white;background-color:#00ff99;border:none;font-weight:800;" type="submit" asp-controller="Login" asp-action="Index">Login</button>
+        <br />
+        <a class="btn btn-lg btn-block form-control btn-outline-dark" style="margin-top: 10px;font-weight:800;" type="button" asp-controller="Login" asp-action="Register">Register</a>
+    </form>
+</div>

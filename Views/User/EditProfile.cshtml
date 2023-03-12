@@ -1,0 +1,100 @@
+﻿@model ta2jir.Models.User
+@{
+    ViewData["Title"] = "EditProfile";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>EditProfile</title>
+    <link rel="stylesheet" href="~/css/uploadProfilePicture.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ProfileSettingsStyleSheet.css" asp-append-version="true" />
+</head>
+
+
+<body>
+    <h1><b>Edit Profile</b></h1>
+    <hr />
+    <form method="post" asp-action="EditProfile" asp-controller="User" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                @if (Model.ProfilePic != null)
+                {
+                    <div class="profile-picture">
+                        <img src="@Model.ProfilePic" alt="Profile picture" />
+                        <div class="shadow-cover"></div>
+                        <input type="file" id="file-upload" name="newProfilePicFile" accept="image/*" />
+                    </div>
+                    <div class="button-container">
+                        <a asp-action="RemovePicture" asp-controller="User" asp-route-userId="@Model.UserId" type="button" class="btn btn-outline-danger remove-btn" title="This button removes the user image and sets the default image">Remove profile picture</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="profile-picture">
+                        <img src="@UserController.ProfilePicture()" alt="Profile picture" />
+                        <div class="shadow-cover"></div>
+                        <input type="file" id="file-upload" name="newProfilePicFile" accept="image/*" />
+                    </div>
+                    <div class="button-container">
+                        <button disabled type="button" class="btn btn-danger remove-btn">Remove Image</button>
+                    </div>
+                }
+            </div>
+            <div class="col-md-8 col-sm-6">
+                <div class="text">
+                    <p class="text-OnForm">
+                        If you leave any field empty the data of the empty field will not change
+                    </p>
+                    <!-- Name Input -->
+                    <div class="form-floating mb-3">
+                        <input type="text" asp-for="Name" name="Name" class="form-control custom-input" id="floatingInputName" maxlength="50" />
+                        <label for="floatingInputName" asp-for="Name">Name</label>
+                        <p class="text-left">
+                            <span asp-validation-for="Name" class="text-warning"></span>
+                        </p>
+                    </div>
+
+                    <!-- Birthdate Input -->
+                    <div class="form-floating mb-3">
+                        <input type="date" asp-for="Birthdate" name="Birthdate" class="form-control custom-input" id="floatingInputBirthdate" />
+                        <label for="floatingInputBirthdate" asp-for="Birthdate">Birthdate</label>
+                        <p class="text-left">
+                            <span asp-validation-for="Birthdate" class="text-warning"></span>
+                        </p>
+                    </div>
+
+                    <!-- Password Input -->
+                    <div class="form-floating mb-3">
+                        <input type="password" asp-for="Password" name="password" class="form-control custom-input" id="floatingInputPassword" />
+                        <label for="floatingInputPassword" asp-for="Password">Password</label>
+                        <p class="text-left">
+                            <span asp-validation-for="Password" class="text-warning"></span>
+                        </p>
+                    </div>
+
+                    <!-- New Password Input -->
+                    <div class="form-floating mb-3">
+                        <input type="password" asp-for="NewPassword" name="NewPassword" class="form-control custom-input" id="NewPassword" />
+                        <label for="NewPassword">New Password</label>
+                        <p class="text-left">
+                            <span asp-validation-for="NewPassword" class="text-warning"></span>
+                        </p>
+                    </div>
+
+                    <!-- Repeat Password Input -->
+                    <div class="form-floating mb-3">
+                        <input type="password" asp-for="RepeatPassword" name="RepeatPassword" class="form-control custom-input" id="RepeatPassword" />
+                        <label for="RepeatPassword">Repeat Password</label>
+                        <p class="text-left">
+                            <span asp-validation-for="RepeatPassword" class="text-warning"></span>
+                        </p>
+                    </div>
+                    <button class="btn btn-success" value="Confirm Changes" asp-route-userId="@LoginController.GetCurrentUser().UserId" type="submit" title="Click to confirm entered changes">Confirm Changes &nbsp;<i class="bi bi-check-lg"></i></button>
+                    <a asp-action="Dashboard" asp-controller="User" asp-route-userId="@Model.UserId" class="btn btn-outline-dark">Return to dashboard</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
