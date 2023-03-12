@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "My Profile";
+}
+@using ta2jir.Controllers;
+@using ta2jir.Models;
+@model ta2jir.Models.User;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="~/css/MyProfileStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+    <h1 class="MyProfile-h1"><strong>Profile</strong></h1>
+    <hr />
+        <div class="ProfilePic-Container">
+            @if (Model.ProfilePic != null)
+            {
+                <img src="@Model.ProfilePic" alt="Profile Picture" class="profile-pic" align="left" />
+            }
+            else
+            {
+                <img src="@UserController.ProfilePicture()" alt="Profile Picture" class="profile-pic" align="left" />
+            }
+            <div class="text" align="left" style="text-align:left;">
+                <h1>@Model.Name</h1>
+                <br />
+                <p>Email: @Model.Email</p>
+                @if (Model.Birthdate != null)
+                {
+                    <p>Birthdate: @ViewData["birthdate"] </p>
+                }
+                else
+                {
+                    <p>Birthdate: not given</p>
+                }
+                <p>Customer since: @Model.DateJoined.ToString("dd.MM.yyyy")</p>
+                <a class="btn btn-success" type="button" asp-action="EditProfile" asp-controller="User" asp-route-userId="@LoginController.GetCurrentUser().UserId">Edit Profile</a>
+            </div>
+        </div>
+</body>
+</html>

@@ -159,7 +159,7 @@ namespace ta2jir.Controllers
                 catch (Exception)
                 {
                     _toastNotification.AddErrorToastMessage("There was an unexpected error please help us by reporting this error and try again");
-                    return RedirectToAction("Dashboard", "User");
+                    return RedirectToAction("MyProfile", "User");
                 }
             }
             else
@@ -183,6 +183,7 @@ namespace ta2jir.Controllers
             }
             else if (newProfilePicFile == null && String.IsNullOrWhiteSpace(userData.ProfilePic) && userData.ProfilePicFile == null)
             {
+                ModelState.Remove("newProfilePicFile");
                 userData.ProfilePic = userFromDB?.ProfilePic;
             }
         }
@@ -264,7 +265,7 @@ namespace ta2jir.Controllers
                 catch (Exception)
                 {
                     _toastNotification.AddErrorToastMessage("There was an unexpected error please help us by reporting this error and try again");
-                    return RedirectToAction("Dashboard", "User");
+                    return RedirectToAction("MyProfile", "User");
                 }
             }
             else
