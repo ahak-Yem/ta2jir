@@ -66,7 +66,7 @@ namespace ta2jir.Controllers
                 User? userFromDB = _db.Users.Find(userId);
                 if (userFromDB != null)
                 {
-                    string? birthdateString=userFromDB.Birthdate.ToString();
+                    string? birthdateString = userFromDB.Birthdate.ToString();
                     if (!String.IsNullOrWhiteSpace(birthdateString))
                     {
                         ViewData["birthdate"] = DateTime.Parse(birthdateString).ToString("dd.MM.yyyy");
@@ -83,15 +83,15 @@ namespace ta2jir.Controllers
             return RedirectToAction("Logout", "Login");
         }
 
-
         /// <summary>
-        /// (Post Method)
+        /// Post Method
         /// </summary>
-        /// <param name="userId"></param>
-        /// <returns>Edit User View or Not Found Page</returns>
+        /// <param name="userData"></param>
+        /// <param name="newProfilePicFile"></param>
+        /// <returns>One of different Viewa depending on the algorithm</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditProfile(User userData, uint? userId, IFormFile newProfilePicFile)
+        public async Task<IActionResult> EditProfile(User userData, IFormFile newProfilePicFile)
         {
             if (_userType == "admin" || _userType == "user")
             {
@@ -276,9 +276,9 @@ namespace ta2jir.Controllers
         [HttpGet]
         public async Task<IActionResult> MyProfile(uint? userId)
         {
-            User? user = await _db.Users.FindAsync(userId);
             if (_userType == "admin" || _userType == "user")
             {
+                User? user = await _db.Users.FindAsync(userId);
                 if (_user.Birthdate != null)
                 {
                     string? birthdateString = user?.Birthdate.ToString();
@@ -288,6 +288,62 @@ namespace ta2jir.Controllers
                     }
                 }
                 return View(_user);
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Login");
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> DeleteAccount(uint? userId)
+        {
+            if (_userType == "admin" || _userType == "user")
+            {
+                if (userId == null)
+                {
+                    return NotFound();
+                }
+                if (userId == 0)
+                {
+                    return NotFound();
+                }
+                User? userData = await _db.Users.FindAsync(userId);
+                if (_userType == "user")
+                {
+                    if (userData != null)
+                    {
+                        userData.IsBlocked = "deleted";
+                        userData.deletedOn = DateTime.Now.Date;
+                        _db.Update(userData);
+                        _db.SaveChangesAsync();
+                        _toastNotification.AddInfoToastMessage(" We are sorry to say goodbye \U0001F622 Your account is deactivated and it will be deleted after 6 months");
+                        return RedirectToAction("Logout", "Login");
+                    }
+                    else
+                    {
+                        _toastNotification.AddErrorToastMessage("Any error has occured please login and retry the process");
+                        return RedirectToAction("Logout", "Login");
+                    }
+                }
+                else if (_userType == "admin")
+                {
+                    if (userData != null)
+                    {
+                        _toastNotification.AddAlertToastMessage("Admins can not delete their own account");
+                        return RedirectToAction("MyProfile", "User", userData.UserId);
+                    }
+                    else
+                    {
+                        _toastNotification.AddErrorToastMessage("Any error has occured please login and retry the process");
+                        return RedirectToAction("Logout", "Login");
+                    }
+                }
+                else
+                {
+                    _toastNotification.AddErrorToastMessage("You are currently not logged in please check your internet connection and log in");
+                    return RedirectToAction("Logout", "Login");
+                }
+
             }
             else
             {
