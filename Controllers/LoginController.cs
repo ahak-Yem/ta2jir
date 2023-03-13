@@ -56,25 +56,38 @@ namespace ta2jir.Controllers
         {
             IEnumerable<Admin> admins = _db.Admins;
             IEnumerable<User> users = _db.Users;
-            string username="no one";
+            string username = "no one";
             if (ModelState.IsValid)
             {
                 foreach (User user in users)
                 {
                     if (Email == user.Email && Password == user.Password)
                     {
-                        loggedUserType = userType.user;
-                        notAuthorized = false;
-                        var claims = new List<Claim>
+                        if (user.IsBlocked == "no")
                         {
-                            new Claim(ClaimTypes.Name, user.Name),
-                            new Claim(ClaimTypes.Email, user.Email)
-                        };
-                        currentUser = user;
-                        var claimsIdentity = new ClaimsIdentity(claims, "Login");
-                        username = user.Name;
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                        break;
+                            loggedUserType = userType.user;
+                            notAuthorized = false;
+                            var claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Name, user.Name),
+                                new Claim(ClaimTypes.Email, user.Email)
+                            };
+                            currentUser = user;
+                            var claimsIdentity = new ClaimsIdentity(claims, "Login");
+                            username = user.Name;
+                            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                            break;
+                        }
+                        else if (user.IsBlocked == "yes")
+                        {
+                            _toastNotification.AddWarningToastMessage("Your account is blocked please contact us to solve this problem");
+                            return View();
+                        }
+                        else if (user.IsBlocked == "deleted")
+                        {
+                            _toastNotification.AddInfoToastMessage("You deleted your account but your data is still saved if you want to reactivate your account please go to account reactivation page");
+                            return View();
+                        }
                     }
                 }
                 if (loggedUserType == userType.user)
@@ -87,7 +100,7 @@ namespace ta2jir.Controllers
                             break;
                         }
                     }
-                    return RedirectToAction("Dashboard", "User", new {currentUser.UserId});
+                    return RedirectToAction("Dashboard", "User", new { currentUser.UserId });
                 }
             }
             if (Email != null && Password != null && loggedUserType == userType.nothing)
@@ -117,7 +130,7 @@ namespace ta2jir.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(User userData, string RePassword)
         {
-            userData.DateJoined =DateTime.Now;
+            userData.DateJoined = DateTime.Now;
             ModelState.Remove("IsBlocked");
             if (_db.Users.Contains(userData))
             {
@@ -144,10 +157,10 @@ namespace ta2jir.Controllers
                 string folder = $"res\\Users\\{userData.Email}\\";
                 string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
                 Directory.CreateDirectory(serverFolder);
-                string file= $"{Guid.NewGuid()}_{userData.Name} Profile Picture_{userData.ProfilePicFile.FileName}";
+                string file = $"{Guid.NewGuid()}_{userData.Name} Profile Picture_{userData.ProfilePicFile.FileName}";
                 string path = serverFolder + file;
                 await userData.ProfilePicFile.CopyToAsync(new FileStream(path, FileMode.Create));
-                userData.ProfilePic = "\\" + folder+file;
+                userData.ProfilePic = "\\" + folder + file;
             }
             if (ModelState.IsValid)
             {
