@@ -27,6 +27,8 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
+    public DateTime? deletedOn { get; set; }
+
     [NotMapped]
     [DataType(DataType.Password)]
     public string? NewPassword { get; set; }

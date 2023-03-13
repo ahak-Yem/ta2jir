@@ -257,7 +257,7 @@ public partial class Ta2jirContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(320);
             entity.Property(e => e.IsBlocked)
                 .HasDefaultValueSql("'no'")
-                .HasColumnType("enum('yes','no')")
+                .HasColumnType("enum('yes','no','deleted')")
                 .HasColumnName("isBlocked");
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.ProfilePic).HasMaxLength(320);
