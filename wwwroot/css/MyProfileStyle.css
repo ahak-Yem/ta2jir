@@ -12,6 +12,33 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
+.header-container {
+    display: flex;
+    align-items: center;
+}
+
+    .header-container h1 {
+        margin-right: 300px;
+        
+    }
+
+    .header-container a {
+        margin-left: 300px;
+        padding-right: 30px;
+        padding-left: 30px;
+        font-size:20px;
+    }
+
+.btns-container {
+    display: flex;
+    align-items: center;
+}
+    .btns-container a {
+        margin-right: 170px;
+    }
+    .btns-container button {
+        margin-left: 170px;
+    }
 .profile-pic {
     width: 200px;
     height: 200px;
@@ -19,7 +46,7 @@ body {
     object-fit: cover;
     margin-bottom: 20px;
     margin-right: 30px;
-    float:left;
+    float: left;
 }
 
 h1 {

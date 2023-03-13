@@ -9,35 +9,53 @@
 <head>
     <title>My Profile</title>
     <link rel="stylesheet" href="~/css/MyProfileStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" asp-append-version="true" href="~/css/deleteBoxStyle.css">
 </head>
 
 <body>
-    <h1 class="MyProfile-h1"><strong>Profile</strong></h1>
+    <div class="header-container">
+        <h1 class="MyProfile-h1"><strong>Profile</strong></h1>
+        <a type="button" class="btn btn-outline-info btn-lg" asp-action="Dashboard" asp-controller="User" asp-route-userId="@Model.UserId">Dashboard</a>
+    </div>
     <hr />
-        <div class="ProfilePic-Container">
-            @if (Model.ProfilePic != null)
+    <div class="ProfilePic-Container">
+        @if (Model.ProfilePic != null)
+        {
+            <img src="@Model.ProfilePic" alt="Profile Picture" class="profile-pic" align="left" />
+        }
+        else
+        {
+            <img src="@UserController.ProfilePicture()" alt="Profile Picture" class="profile-pic" align="left" />
+        }
+        <div class="text" align="left" style="text-align:left;">
+            <h1>@Model.Name</h1>
+            <br />
+            <p>Email: @Model.Email</p>
+            @if (Model.Birthdate != null)
             {
-                <img src="@Model.ProfilePic" alt="Profile Picture" class="profile-pic" align="left" />
+                <p>Birthdate: @ViewData["birthdate"] </p>
             }
             else
             {
-                <img src="@UserController.ProfilePicture()" alt="Profile Picture" class="profile-pic" align="left" />
+                <p>Birthdate: not given</p>
             }
-            <div class="text" align="left" style="text-align:left;">
-                <h1>@Model.Name</h1>
-                <br />
-                <p>Email: @Model.Email</p>
-                @if (Model.Birthdate != null)
-                {
-                    <p>Birthdate: @ViewData["birthdate"] </p>
-                }
-                else
-                {
-                    <p>Birthdate: not given</p>
-                }
-                <p>Customer since: @Model.DateJoined.ToString("dd.MM.yyyy")</p>
+            <p>Customer since: @Model.DateJoined.ToString("dd.MM.yyyy")</p>
+            <div class="btns-container">
                 <a class="btn btn-success" type="button" asp-action="EditProfile" asp-controller="User" asp-route-userId="@LoginController.GetCurrentUser().UserId">Edit Profile</a>
+                <button class="btn btn-danger" id="delete-btn" onclick="showConfirmationBox()">Delete Account</button>
+            </div>
+            <!-- Confirmation box markup -->
+            <div class="confirmation-box">
+                <h2>Are you sure you want to delete your account?</h2>
+                <hr />
+                <p>Your data will be saved in our database for 6 months and will be deleted permanently after this period.</p>
+                <p>You can reactivate your account at anytime during the 6 months.</p>
+                <a class="btn btn-danger" asp-action="DeleteAccount" asp-controller="User" asp-route-userId="@Model.UserId">Delete</a>
+                <button class="btn btn-outline-dark" onclick="hideConfirmationBox()">Cancel</button>
             </div>
         </div>
+    </div>
+    <!-- JavaScript to show/hide the confirmation box -->
+    <script src="~/js/deleteBoxJS.js"></script>
 </body>
 </html>
